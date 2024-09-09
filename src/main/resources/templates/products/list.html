@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Product List</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom Styles -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      padding: 2rem;
+    }
+    h2 {
+      color: #343a40;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.03);
+    }
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+    .card-body {
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #007bff;
+    }
+    .card-text {
+      color: #6c757d;
+    }
+    .btn {
+      margin: 0.5rem;
+    }
+    .btn-edit {
+      background-color: #ffc107;
+      border-color: #ffc107;
+    }
+    .btn-edit:hover {
+      background-color: #e0a800;
+    }
+    .btn-delete {
+      background-color: #dc3545;
+      border-color: #dc3545;
+    }
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+    .form-control {
+      border-radius: 20px;
+    }
+    .form-control:focus {
+      box-shadow: none;
+      border-color: #007bff;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h2 class="mb-4">Product List</h2>
+
+  <!-- Filter Form -->
+  <form th:action="@{/admin/products/filter}" method="get" class="mb-4">
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label class="sr-only" for="category">Filter by Category:</label>
+        <select id="category" name="categoryId" class="form-control">
+          <option value="">All Categories</option>
+          <option th:each="category : ${categories}"
+                  th:value="${category.id}"
+                  th:text="${category.name}"
+                  th:selected="${category.id} == ${selectedCategoryId}">Category</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Product Cards -->
+  <div class="row">
+    <div class="col-md-4 mb-4" th:each="product : ${products}">
+      <div class="card">
+        <img th:src="@{${product.imageUrl}}" class="card-img-top" alt="Product Image">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+          <p class="card-text" th:text="${product.description}">Product Description</p>
+          <p class="card-text">
+            <strong>Price:</strong> $<span th:text="${product.price}">Price</span>
+          </p>
+          <p class="card-text">
+            <strong>Category:</strong> <span th:text="${product.category.name}">Category</span>
+          </p>
+          <a th:href="@{/admin/products/edit/{id}(id=${product.id})}" class="btn btn-edit">Edit</a>
+          <a th:href="@{/admin/products/delete/{id}(id=${product.id})}" th:onclick="return confirm('Are you sure?');" class="btn btn-delete">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

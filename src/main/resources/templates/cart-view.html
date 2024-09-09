@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Cart View</title>
+  <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .cart-info {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .cart-info h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .cart-info p {
+            font-size: 1.2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        table td span {
+            font-weight: bold;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        .checkout-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #28a745; /* Green background */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+    </style>
+</head>
+<body>
+<header>
+  <h1>Shopping Cart</h1>
+</header>
+
+<div class="container">
+  <div th:if="${cart != null}" class="cart-info">
+    <h2>Cart ID: <span th:text="${cart.id}"></span></h2>
+    <p>Total Value: $<span th:text="${cart.totalValue}"></span></p>
+
+    <table>
+      <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item : ${cart.items}">
+        <td th:text="${item.product.name}"></td>
+        <td th:text="${item.product.description}"></td>
+        <td>$<span th:text="${item.product.price}"></span></td>
+        <td th:text="${item.quantity}"></td>
+        <td>$<span th:text="${item.product.price * item.quantity}"></span></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div th:if="${cart == null}" class="empty-cart">
+    <p>Your cart is empty or could not be retrieved.</p>
+  </div>
+  <div style="text-align: center; margin-top: 1.5rem;">
+    <a href="/checkout" class="checkout-button">Checkout</a>
+  </div>
+
+</div>
+</body>
+</html>

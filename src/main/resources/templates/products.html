@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Product List</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom Styles -->
+  <style>
+    /* Your existing styles */
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h2 class="mb-4">Product List</h2>
+
+  <!-- Filter Form -->
+  <form th:action="@{/customfilter}" method="get" class="mb-4">
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label class="sr-only" for="category">Filter by Category:</label>
+        <select id="category" name="categoryId" class="form-control">
+          <option value="">All Categories</option>
+          <option th:each="category : ${categories}"
+                  th:value="${category.id}"
+                  th:text="${category.name}"
+                  th:selected="${category.id} == ${selectedCategoryId}">Category</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Product Cards -->
+  <div class="row">
+    <div class="col-md-4 mb-4" th:each="product : ${products}">
+      <div class="card">
+        <img th:src="@{${product.imageUrl}}" class="card-img-top" alt="Product Image">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+          <p class="card-text" th:text="${product.description}">Product Description</p>
+          <p class="card-text">
+            <strong>Price:</strong> $<span th:text="${product.price}">Price</span>
+          </p>
+          <p class="card-text">
+            <strong>Category:</strong> <span th:text="${product.category.name}">Category</span>
+          </p>
+          <!-- Add to Cart Button -->
+          <!-- Add this form inside your product card div -->
+          <form action="/cart/add" method="post">
+            <input type="hidden" name="userId" th:if="${user != null}" th:value="${user.id}" />
+            <input type="hidden" name="productId" th:value="${product.id}" />
+            <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" />
+            <button type="submit" class="btn btn-edit">Add to Cart</button>
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
